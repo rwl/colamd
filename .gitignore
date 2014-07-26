@@ -1,2 +1,9 @@
-target/*
-.settings/
+out/
+packages
+pubspec.lock
+
+.idea/
+colamd.iml
+
+.project
+/.settings/
