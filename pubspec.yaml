@@ -1,7 +1,7 @@
 name: colamd
-version: 0.0.1
-author: Timothy A. Davis
+version: 0.1.0
+author: Richard Lincoln <r.w.lincoln@gmail.com>
 description: Column approximate minimum degree ordering algorithm.
 homepage: http://www.cise.ufl.edu/research/sparse/colamd/
 dependencies:
-  unittest: any
+  unittest: '>=0.11.0+3 <0.12.0'
