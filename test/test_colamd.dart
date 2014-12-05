@@ -1,24 +1,24 @@
-/**
- * Copyright (c) 1998-2007, Timothy A. Davis, All Rights Reserved.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301
- */
+/// Copyright (c) 1998-2007, Timothy A. Davis, All Rights Reserved.
+///
+/// This library is free software; you can redistribute it and/or
+/// modify it under the terms of the GNU Lesser General Public
+/// License as published by the Free Software Foundation; either
+/// version 2.1 of the License, or (at your option) any later version.
+///
+/// This library is distributed in the hope that it will be useful,
+/// but WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+/// Lesser General Public License for more details.
+///
+/// You should have received a copy of the GNU Lesser General Public
+/// License along with this library; if not, write to the Free Software
+/// Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301
+library colamd.test;
+
 import 'dart:io' show stdout;
 import 'dart:typed_data';
 import 'package:unittest/unittest.dart';
-import 'package:colamd/colamd.dart';
+import 'package:colamd/colamd.dart' as colamd;
 
 const int A_NNZ = 11 ;
 const int A_NROW = 5 ;
@@ -28,35 +28,33 @@ const int ALEN = 150 ;
 const int B_NNZ = 4 ;
 const int B_N = 5 ;
 
-/**
- * COLAMD / SYMAMD example
- *
- * colamd example of use, to order the columns of a 5-by-4 matrix with
- * 11 nonzero entries in the following nonzero pattern, with default knobs.
- *
- *   x 0 x 0
- *   x 0 x x
- *   0 x x 0
- *   0 0 x x
- *   x x 0 0
- *
- * symamd example of use, to order the rows and columns of a 5-by-5
- * matrix with 13 nonzero entries in the following nonzero pattern,
- * with default knobs.
- *
- *   x x 0 0 0
- *   x x x x 0
- *   0 x x 0 0
- *   0 x 0 x x
- *   0 0 0 x x
- *
- * (where x denotes a nonzero value).
-*/
+/// COLAMD / SYMAMD example
+///
+/// colamd example of use, to order the columns of a 5-by-4 matrix with
+/// 11 nonzero entries in the following nonzero pattern, with default knobs.
+///
+///   x 0 x 0
+///   x 0 x x
+///   0 x x 0
+///   0 0 x x
+///   x x 0 0
+///
+/// symamd example of use, to order the rows and columns of a 5-by-5
+/// matrix with 13 nonzero entries in the following nonzero pattern,
+/// with default knobs.
+///
+///   x x 0 0 0
+///   x x x x 0
+///   0 x x 0 0
+///   0 x 0 x x
+///   0 0 0 x x
+///
+/// (where x denotes a nonzero value).
 main() {
 
-  NDEBUG = false;
-  NPRINT = false;
-  colamd_debug = 0;
+  colamd.debug = true;
+  colamd.nprint = false;
+  colamd.debugLevel = 0;
 
   test('colamd', () {
 
@@ -110,7 +108,7 @@ main() {
     /* ====================================================================== */
 
     final perm = new Int32List (B_N+1) ;		/* note the size is N+1 */
-    final stats = new Int32List (COLAMD_STATS) ;	/* for colamd and symamd output statistics */
+    final stats = new Int32List (colamd.STATS) ;	/* for colamd and symamd output statistics */
 
     int row, col, pp, length, ok ;
 
@@ -134,8 +132,8 @@ main() {
     /* order the matrix.  Note that this destroys A and overwrites p */
     /* ====================================================================== */
 
-    ok = colamd (A_NROW, A_NCOL, ALEN, A, p, null, stats) ;
-    COLAMD_report (stats) ;
+    ok = colamd.colamd (A_NROW, A_NCOL, ALEN, A, p, null, stats) ;
+    colamd.colamdReport (stats) ;
 
     if (ok == 0)
     {
@@ -179,8 +177,8 @@ main() {
     /* order the matrix B.  Note that this does not modify B or q. */
     /* ====================================================================== */
 
-    ok = symamd (B_N, B, q, perm, null, stats) ;
-    SYMAMD_report (stats) ;
+    ok = colamd.symamd (B_N, B, q, perm, null, stats) ;
+    colamd.symamdReport (stats) ;
 
     if (ok == 0)
     {
@@ -206,5 +204,3 @@ main() {
     expect(4, equals(perm [4])) ;
   });
 }
-
-//}
